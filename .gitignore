@@ -1,0 +1,22 @@
+# Entorno virtual
+venv/
+__pycache__/
+
+# Archivos de configuración de entorno
+#.env #DE MOMENTO SUBIMOS EL .env
+
+# Archivos temporales
+*.pyc
+*.pyo
+*.log
+
+# Carpetas de compilación o archivos generados
+ammu-nation
+ammu-nation-info
+ammu-nation-shm
+ammu-nation-wal
+
+# Imágenes o archivos de carga
+
+# IDEs / editores (VSCode)
+.vscode/
