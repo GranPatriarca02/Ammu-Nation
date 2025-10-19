@@ -6,8 +6,6 @@
 
 En este proyecto desarrollaremos una **aplicación de gestión** inspirada en dicha franquicia, que permitirá administrar de forma sencilla todo el inventario de la tienda.
 
-### **OBJETIVO**
-
 El objetivo principal es crear un sistema **CRUD** (Create, Read, Update, Delete) que permita gestionar la información de los productos disponibles en la tienda.
 
 - **Agregar** nuevos productos (armas, munición o accesorios, cada uno de ellos ligados a un código de identificacion único o código de serie).
@@ -17,7 +15,7 @@ El objetivo principal es crear un sistema **CRUD** (Create, Read, Update, Delete
 
 ### USO DEL PROGRAMA
 
-.......**GRANTES DEL PROYECTO**
+**INTEGRANTES DEL PROYECTO**
 
 * Javier
 * Carlos Andrés Rojas
