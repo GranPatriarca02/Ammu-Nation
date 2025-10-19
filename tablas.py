@@ -48,7 +48,28 @@ def crearTablas():
                             FOREIGN KEY (ID_TIPO_ARMA) REFERENCES TIPO_ARMA(ID),
                             FOREIGN KEY (ID_CALIBRE) REFERENCES CALIBRES(ID),
                             FOREIGN KEY (ID_FABRICANTE) REFERENCES FABRICANTES(ID))
-                    ''')
+                    ''')  
+        # - COMENTARIOS TEMPORALES.
+        # VALORES POR DEFECTO: Se podran insertar mas en el CRUD ((funcion temporal?)).
+        # PODRIAMOS OBTENER DICHOS VALORES DESDE UN FICHERO .txt, en caso de necesitarlo.
+        datos = {
+            "CATEGORIAS": ["Armas", "Municion", "Accesorios"],
+            "TIPO_ARMA": ["Handguns","Shotguns","Submachine Guns","Assault Rifles","Light Machine Guns", "Sniper Rifles", "Sniper Rifles", "Melee"],
+            "CALIBRES": [".25 ACP",".32 ACP","9×19 mm",".357 Magnum",".40 S&W",
+                        "12 gauge","20 gauge",
+                        "7.62×25 mm","5.7×28 mm","5.56×45 mm",
+                        "7.62×39 mm","7.62×51 mm",".300 Winchester Magnum",".50 BMG"],
+            "FABRICANTES": ["Vandergraaf Arms","Rustline Works","Northwind Defense Co.","Redcrest Ordnance"]
+        }
         
+        for tabla, valores in datos.items():
+            for v in valores:
+                # Ejecutamos la consulta a la base de datos para insertar los valores.
+                # IGNORE ignora un valor que pueda estar repetido.
+                cursor.execute(f"INSERT OR IGNORE INTO {tabla} (NOMBRE) VALUES (?)", (v,))
+                
+        actualizarCommit() # Confirmamos y aplicamos los cambios.
+        print("Tablas creadas y datos predefinidos insertados correctamente.")
+    
     except Exception as e:
         print("[ERROR] No se han podido crear las tablas", e)
