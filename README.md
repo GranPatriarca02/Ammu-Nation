@@ -35,8 +35,8 @@ El objetivo principal es crear un sistema **CRUD** (Create, Read, Update, Delete
 
 #### **INTEGRANTES DEL PROYECTO**
 
-* Javier ... (...)
-* Carlos Andrés Rojas ([GranPatriarca02](https://github.com/GranPatriarca02))
+* Javier Alcocer Carrero (...)
+* Carlos Andrés Rojas Monasterio ([GranPatriarca02](https://github.com/GranPatriarca02))
 * Antonio Nikolaev Mitev ([Chevelle1337](https://github.com/Chevelle1337)) ([TonyMN8](https://github.com/TonyMN8))
 
 ---
