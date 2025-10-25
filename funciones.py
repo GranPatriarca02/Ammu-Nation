@@ -5,8 +5,16 @@ from db import cursor, actualizarCommit
 def validarFila(tabla, id_tabla):
     # Ejecutamos la consulta y devolvemos la tabla {FABRICANTES}, id_tabla remplaza la ID que seleccionamos con un input
     # en la ejecución de WHERE ID = ?
-    cursor.execute(f"SELECT ID FROM {tabla} WHERE ID = ?", (id_tabla))
+    cursor.execute(f"SELECT ID FROM {tabla} WHERE ID = ?", (id_tabla,))
     return cursor.fetchone() is not None # Retornamos un valor booleano, si no es nula devuelve TRUE.
+
+def validarCampo(tabla, mensaje):
+    while True: 
+        id = validarInt(mensaje)
+        if validarFila(tabla, id):
+            return id
+        else:
+            print(f"El ID: {id} no existe en la tabla: {tabla}")
 
 
 # Creamos un bucle para validar los numeros que introduzca el usuario.
@@ -21,12 +29,11 @@ def validarInt(mensaje):
 def crearProducto():
     try:
         codigo_serie = input("Codigo de serie: ").strip()
-        nombre = input("Nombre del producto:").strip()
-        id_calibre = validarInt("Selecciona el calibre: ")
-        id_categoria = validarInt("Selecciona la categoria: ")
-        id_tipo_arma = validarInt("Selecciona el tipo de arma: ")
-        id_categoria =  validarInt("Selecciona el tipo de categoria: ")
-        id_fabricante =  validarInt("Selecciona el fabricante: ")
+        nombre = input("Nombre del producto: ").strip()
+        id_calibre = validarCampo("CALIBRES", "Selecciona el calibre: ")
+        id_categoria = validarCampo("CATEGORIAS", "Selecciona la categoria: ")
+        id_tipo_arma = validarCampo("TIPO_ARMA", "Selecciona el tipo de arma: ")
+        id_fabricante =  validarCampo("FABRICANTES", "Selecciona el fabricante: ")
         stock =  validarInt("Cantidad de stock:  ")
         precio =  validarInt("Introduce el precio del producto: ")
         descripcion = input("Introduce la descripcion del producto: ").strip()
