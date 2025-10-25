@@ -1,5 +1,6 @@
 # Importamos los elementos cursor y actualizarCommit del archivo db.py
 from db import cursor, actualizarCommit
+from tablas import recorrerTablas
 import random
 
 # Validamos si existe la fila a la que queremos acceder.
@@ -30,9 +31,13 @@ def validarInt(mensaje):
 def crearProducto():
     try:
         nombre = input("Nombre del producto: ").strip()
+        recorrerTablas("CALIBRES")
         id_calibre = validarCampo("CALIBRES", "Selecciona el calibre: ")
+        recorrerTablas("CATEGORIAS")
         id_categoria = validarCampo("CATEGORIAS", "Selecciona la categoria: ")
-        id_tipo_arma = validarCampo("TIPO_ARMA", "Selecciona el tipo de arma: ")
+        recorrerTablas("TIPO_ARMA")
+        id_tipo_arma = validarCampo("TIPO_ARMA", "Selecciona el tipo de ar2ma: ")
+        recorrerTablas("FABRICANTES")
         id_fabricante =  validarCampo("FABRICANTES", "Selecciona el fabricante: ")
         stock =  validarInt("Cantidad de stock: ")
         precio =  validarInt("Introduce el precio del producto: ")
@@ -59,6 +64,8 @@ def codigoDeSerie(id_categoria):
         # ACC para ACCESROIOS
     # Obtenemos el nombre de la categoria, se puede hacer por IDS, pero si cambiamos el nombre de la categoria 
     # recuperaremos el valor eroneamente.
+    # Una vez obtenemos la categoría nos generará 7 digitos aleatorios, (Se puede crear una función que también detecte si
+    # es posible que el numero sea unico, aunque en la base de datos ya esta restringido con UNIQUE)
 
     cursor.execute("SELECT NOMBRE FROM CATEGORIAS WHERE ID = ?", (id_categoria,))
     consulta = cursor.fetchone()
