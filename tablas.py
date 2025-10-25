@@ -35,7 +35,7 @@ def crearTablas():
         # Tabla TIPO PRODUCTOS
         cursor.execute('''
                     CREATE TABLE IF NOT EXISTS PRODUCTOS(
-                            CODIGO_SERIE TEXT PRIMARY KEY,
+                            CODIGO_SERIE TEXT UNIQUE PRIMARY KEY,
                             NOMBRE TEXT NOT NULL,
                             ID_CALIBRE INTEGER NOT NULL,
                             ID_TIPO_ARMA INTEGER NOT NULL,
@@ -48,7 +48,8 @@ def crearTablas():
                             FOREIGN KEY (ID_TIPO_ARMA) REFERENCES TIPO_ARMA(ID),
                             FOREIGN KEY (ID_CALIBRE) REFERENCES CALIBRES(ID),
                             FOREIGN KEY (ID_FABRICANTE) REFERENCES FABRICANTES(ID))
-                    ''')  
+                    ''') 
+        
         # - COMENTARIOS TEMPORALES.
         # VALORES POR DEFECTO: Se podran insertar mas en el CRUD ((funcion temporal?)).
         # PODRIAMOS OBTENER DICHOS VALORES DESDE UN FICHERO .txt, en caso de necesitarlo.
@@ -73,3 +74,19 @@ def crearTablas():
     
     except Exception as e:
         print("[ERROR] No se han podido crear las tablas", e)
+
+def recorrerTablas(nombreTabla):
+     try:
+        # Preparamos nuestra consulta y la guardamos en la variable filas.
+        cursor.execute(f"SELECT * FROM {nombreTabla}")
+        filas = cursor.fetchall()
+        # Si filas es verdadero mostramos el contenido de la tabla y recorremos la fila una por una para mostrarla.
+        if filas:
+            print(f"SELECCION DE: {nombreTabla}")
+            for fila in filas:
+                print(f"{fila[0]}: {fila[1]}")
+        else:
+            print("La tabla: {nombreTabla} esta vacia.")
+
+     except Exception as e:
+         print(f"ERROR: No se ha podido recorrer la tabla: {nombreTabla} o no existe", e)
