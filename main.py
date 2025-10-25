@@ -23,7 +23,6 @@ def main():
                 print("La tabla se encuentra vacia")
     except Exception as e:
         print("ERROR: ", e)
-            
-            
+                
 main()
 
