@@ -1,7 +1,12 @@
 # Importamos los elementos cursor y actualizarCommit del archivo db.py
 from db import cursor, actualizarCommit
 
-
+# Validamos si existe la fila a la que queremos acceder.
+def validarFila(tabla, id_tabla):
+    # Ejecutamos la consulta y devolvemos la tabla {FABRICANTES}, id_tabla remplaza la ID que seleccionamos con un input
+    # en la ejecución de WHERE ID = ?
+    cursor.execute(f"SELECT ID FROM {tabla} WHERE ID = ?", (id_tabla))
+    return cursor.fetchone() is not None # Retornamos un valor booleano, si no es nula devuelve TRUE.
 
 
 # Creamos un bucle para validar los numeros que introduzca el usuario.
