@@ -30,18 +30,56 @@ def validarInt(mensaje):
 
 def crearProducto():
     try:
-        nombre = input("Nombre del producto: ").strip()
+        #NOMBRE # Validamos el nombre del producto: 
+        validar_nombre = False
+        while not validar_nombre:
+            nombre = input("Nombre del producto: ").strip()
+            if(len(nombre) == 0):
+                print("ERROR: El campo nombre no puede estar vacio.")
+                validar_nombre = False
+            elif(3 <= len(nombre) <= 30):
+                validar_nombre = True
+            else:
+                print("ERROR: El campo nombre debe tener entre 3 y 30 letras.")
+        #CALIBRE # La validacion se hace desde validarCampo.
         recorrerTablas("CALIBRES")
         id_calibre = validarCampo("CALIBRES", "Selecciona el calibre: ")
+        #CATEGORIAS # La validacion se hace desde validarCampo.
         recorrerTablas("CATEGORIAS")
         id_categoria = validarCampo("CATEGORIAS", "Selecciona la categoria: ")
+        #TIPO_ARMA # La validacion se hace desde validarCampo.
         recorrerTablas("TIPO_ARMA")
         id_tipo_arma = validarCampo("TIPO_ARMA", "Selecciona el tipo de ar2ma: ")
+        #FABRICANTES # La validacion se hace desde validarCampo.
         recorrerTablas("FABRICANTES")
         id_fabricante =  validarCampo("FABRICANTES", "Selecciona el fabricante: ")
-        stock =  validarInt("Cantidad de stock: ")
-        precio =  validarInt("Introduce el precio del producto: ")
-        descripcion = input("Introduce la descripcion del producto: ").strip()
+        #STOCK # Validamos la cantidad de stock del producto: 
+        validar_stock = False
+        while not validar_stock:
+            stock =  validarInt("Cantidad de stock: ")
+            if(stock >= 0 and stock <= 10000):
+                validar_stock = True
+            else:
+                print("ERROR: El stock debe estar entre 0 y 10.000")
+        #PRECIO # Validamos que el precio del producto este entre 1 y 30.000.
+        validar_precio = False
+        while not validar_precio:
+            precio =  validarInt("Introduce el precio del producto: ")
+            if(precio > 0 and precio <= 30000):
+                validar_precio = True
+            else:
+                print("ERROR: El precio del producto debe estar entre $1 y $30.000")
+        #DESCRIPCION # Validamos la descripcion del producto: 
+        validar_descripcion = False
+        while not validar_descripcion:
+            descripcion = input("Introduce la descripcion del producto: ").strip()
+            if(len(descripcion) == 0):
+                print("ERROR: La descripcion no puede estar vacia.")
+                validar_descripcion = False
+            elif(5 <= len(descripcion) <= 1000):
+                validar_descripcion = True
+            else:
+                print("ERROR: La descripcion debe contener entre 5 y 1000 letras")
         codigo_serie = codigoDeSerie(id_categoria)
 
         # Creamos la consulta para insertar los datos:

@@ -13,7 +13,8 @@ def menu():
         print("______ AMMU NATION ______")
         print("1. Inventario.")
         print("2. Agregar producto.")
-        print("3. Mostrar categorias.")
+        print("3. Mostrar productos.")
+        print("4. Mostrar categorias.")
         print("0. Cerrar menu.")
 
         opcion = input("Introduce una opcion: ").strip()
