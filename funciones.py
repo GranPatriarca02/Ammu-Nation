@@ -10,6 +10,8 @@ def validarFila(tabla, id_tabla):
     cursor.execute(f"SELECT ID FROM {tabla} WHERE ID = ?", (id_tabla,))
     return cursor.fetchone() is not None # Retornamos un valor booleano, si no es nula devuelve TRUE.
 
+# Validamos si el campo de la tabla existe
+# Este metodo contiene validarInt, que valida si el campo introducido es un numero.
 def validarCampo(tabla, mensaje):
     while True: 
         id = validarInt(mensaje)
@@ -17,7 +19,6 @@ def validarCampo(tabla, mensaje):
             return id
         else:
             print(f"El ID: {id} no existe en la tabla: {tabla}")
-
 
 # Creamos un bucle para validar los numeros que introduzca el usuario.
 def validarInt(mensaje):
@@ -28,6 +29,7 @@ def validarInt(mensaje):
         else:
             print("ERROR: Debes introducir un numero.")
 
+# Funcion que crea un producto:
 def crearProducto():
     try:
         #NOMBRE # Validamos el nombre del producto: 
@@ -128,5 +130,3 @@ def codigoDeSerie(id_categoria):
         numAleatorio = numAleatorio + random.choice("1234567890")
     # Retornamos fuera del bucle el codigo de serie:    
     return f"{nombreCategoria}-{numAleatorio}"
-
-

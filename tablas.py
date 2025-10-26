@@ -90,3 +90,37 @@ def recorrerTablas(nombreTabla):
 
      except Exception as e:
          print(f"ERROR: No se ha podido recorrer la tabla: {nombreTabla} o no existe", e)
+# Mostramos los productos: 
+def mostrarProducto():
+    try:    
+        cursor.execute('''
+            SELECT 
+                P.CODIGO_SERIE, 
+                P.NOMBRE, 
+                C.NOMBRE AS CALIBRE, 
+                T.NOMBRE AS TIPO_ARMA, 
+                CAT.NOMBRE AS CATEGORIA, 
+                F.NOMBRE AS FABRICANTE,
+                P.STOCK,
+                P.PRECIO,
+                P.DESCRIPCION
+            FROM PRODUCTOS P
+            JOIN CALIBRES C ON P.ID_CALIBRE = C.ID
+            JOIN TIPO_ARMA T ON P.ID_TIPO_ARMA = T.ID
+            JOIN CATEGORIAS CAT ON P.ID_CATEGORIA = CAT.ID
+            JOIN FABRICANTES F ON P.ID_FABRICANTE = F.ID
+        ''')
+
+        contador = 0
+        filas = cursor.fetchall()
+        if filas:
+            for fila in filas:
+                contador +=1
+                print(f"{contador}): Codigo de serie: {fila[0]}, Nombre: {fila[1]}, Calibre: {fila[2]}, Tipo de arma: {fila[3]}, Categoria: {fila[4]}, Fabricante: {fila[5]}, Stock: {fila[6]}, Precio: {fila[7]}$")
+                print(f"Descripcion: {fila[8]} \n")
+        else:
+            print("No hay productos creados.")
+        
+
+    except Exception as e:
+        print("ERROR: No se ha podido recorrer la tabla PRODUCTOS", e)
