@@ -91,7 +91,7 @@ def recorrerTablas(nombreTabla):
      except Exception as e:
          print(f"ERROR: No se ha podido recorrer la tabla: {nombreTabla} o no existe", e)
 # Mostramos los productos: 
-def mostrarProducto():
+def mostrarProductos():
     try:    
         cursor.execute('''
             SELECT 

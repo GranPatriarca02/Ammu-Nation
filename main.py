@@ -1,8 +1,8 @@
 # ARCHIVO PRINCIPAL.
 
 # Accedemos a la clase tablas y usamos el objeto cursor para lanzar las consultas.
-from tablas import cursor, mostrarProducto
-from funciones import crearProducto, borrarProducto
+from tablas import cursor, mostrarProductos
+from funciones import crearProducto, borrarProducto, buscarProducto
 
 # TEMPORAL:
 ## Mostramos el contenido de las TABLAS de forma temporal, se debe crear un metodo.
@@ -30,7 +30,7 @@ def menu():
 
 def menuProductos():
     while True:
-        print("MENU DE PRODUCTOS: ")
+        print("______ AMMU NATION: MENU DE PRODUCTOS: ______")
         print("1. Agregar un producto.")
         print("2. Mostrar lista de productos.")
         print("3. Buscar un producto.")
@@ -42,9 +42,9 @@ def menuProductos():
         if opcion == "1":
             crearProducto()
         elif opcion == "2":
-            mostrarProducto()
+            mostrarProductos()
         elif opcion == "3":
-            print("NOPE")
+            buscarProducto()
         elif opcion == "4":
             print("NOPE")
         elif opcion == "5":

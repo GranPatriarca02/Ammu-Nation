@@ -1,6 +1,6 @@
 # Importamos los elementos cursor y actualizarCommit del archivo db.py
 from db import cursor, actualizarCommit
-from tablas import recorrerTablas, mostrarProducto
+from tablas import recorrerTablas, mostrarProductos
 import random
 
 # Validamos si existe la fila a la que queremos acceder.
@@ -96,9 +96,50 @@ def crearProducto():
     except Exception as e:
         print("ERROR: No se ha podido crear el producto: ", e)
 
+def buscarProducto():
+    try:
+        codigo_serie = input("Introduce el codigo de serie del produto que quieres buscar: ").strip()
+        cursor.execute('''
+                SELECT 
+                    P.CODIGO_SERIE, 
+                    P.NOMBRE, 
+                    C.NOMBRE AS CALIBRE, 
+                    T.NOMBRE AS TIPO_ARMA, 
+                    CAT.NOMBRE AS CATEGORIA, 
+                    F.NOMBRE AS FABRICANTE,
+                    P.STOCK,
+                    P.PRECIO,
+                    P.DESCRIPCION
+                FROM PRODUCTOS P
+                JOIN CALIBRES C ON P.ID_CALIBRE = C.ID
+                JOIN TIPO_ARMA T ON P.ID_TIPO_ARMA = T.ID
+                JOIN CATEGORIAS CAT ON P.ID_CATEGORIA = CAT.ID
+                JOIN FABRICANTES F ON P.ID_FABRICANTE = F.ID
+                WHERE P.CODIGO_SERIE = ?
+            ''', (codigo_serie,))
+        producto = cursor.fetchone()
+
+        if producto:
+            print("")
+            print(f"Nombre del producto: {producto[1]}")
+            print(f"Codigo de serie: {producto[0]}")
+            print(f"Calibre: {producto[2]}")
+            print(f"Tipo de arma: {producto[3]}")
+            print(f"Categoria: {producto[4]}")
+            print(f"Fabricante: {producto[5]}")
+            print(f"Cantidad de stock: {producto[6]}")
+            print(f"Precio: {producto[7]}")
+            print(f"Descripcion: {producto[8]}")
+            print("")
+        else:
+            print("No se ha encontrado el producto.")     
+
+    except Exception as e:
+        print("ERROR: No se ha podido mostrar el producto", e)
+
 def borrarProducto():
     try:
-        mostrarProducto()
+        mostrarProductos()
         # Almacenamos el codigo de serie en una variable borrando los espacios y haciendo que el String este en mayusculas.
         codigo_serie = input("Introduce el codigo de serie del producto que deseas borrar: ").strip().upper()
         
