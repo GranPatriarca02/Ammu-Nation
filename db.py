@@ -16,6 +16,7 @@ conn = libsql.connect("ammu-nation", sync_url=DB_URL, auth_token=API_TOKEN)
 conn.sync()
 cursor = conn.cursor()
 
+# Metodo que guarda todos los cambios hechos en la bd.
 def actualizarCommit():
     try:
         conn.commit()
