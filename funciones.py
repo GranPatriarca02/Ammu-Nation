@@ -122,8 +122,6 @@ def borrarProducto():
     except Exception as e:
         print("ERROR: No se ha podido eliminar el producto.", e)
 
-
-
 def codigoDeSerie(id_categoria):
     # El codigo de serie variara segun el tipo de categoria:
         # ARM para ARMAS

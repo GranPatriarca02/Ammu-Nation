@@ -121,6 +121,5 @@ def mostrarProducto():
         else:
             print("No hay productos creados.")
         
-
     except Exception as e:
         print("ERROR: No se ha podido recorrer la tabla PRODUCTOS", e)
