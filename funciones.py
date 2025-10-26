@@ -1,6 +1,6 @@
 # Importamos los elementos cursor y actualizarCommit del archivo db.py
 from db import cursor, actualizarCommit
-from tablas import recorrerTablas
+from tablas import recorrerTablas, mostrarProducto
 import random
 
 # Validamos si existe la fila a la que queremos acceder.
@@ -95,6 +95,33 @@ def crearProducto():
     
     except Exception as e:
         print("ERROR: No se ha podido crear el producto: ", e)
+
+def borrarProducto():
+    try:
+        mostrarProducto()
+        # Almacenamos el codigo de serie en una variable borrando los espacios y haciendo que el String este en mayusculas.
+        codigo_serie = input("Introduce el codigo de serie del producto que deseas borrar: ").strip().upper()
+        
+        cursor.execute("SELECT NOMBRE FROM PRODUCTOS WHERE CODIGO_SERIE = ?", (codigo_serie,))
+        producto = cursor.fetchone()
+
+        if(producto is None):
+            print(f"El codigo de serie: {codigo_serie} no existe.")
+        else:
+            confirmar = input(f"Seguro que queres eliminar el producto: {producto[0]}? S(i) N(o): ").strip().upper()
+            if(confirmar == "S"):
+                cursor.execute("DELETE FROM PRODUCTOS WHERE CODIGO_SERIE = ?", (codigo_serie,))
+                # Actualizamos los cambios
+                actualizarCommit()
+                print(f"Has eliminado el producto: {producto[0]}")
+            elif(confirmar == "N"):
+                print(f"Has cancelado la operacion, no se ha eliminado el producto: {producto[0]}")
+            else:
+                print(f"Has introducido otro caracter, no se ha eliminado el producto: {producto[0]}")
+
+    except Exception as e:
+        print("ERROR: No se ha podido eliminar el producto.", e)
+
 
 
 def codigoDeSerie(id_categoria):
