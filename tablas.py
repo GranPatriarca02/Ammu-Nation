@@ -183,5 +183,3 @@ def mostrarPorCategoria():
 
     except Exception as e:
         print("ERROR: No se ha podido mostrar los productos por categoria", e)
-
-
