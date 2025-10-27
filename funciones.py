@@ -43,18 +43,45 @@ def crearProducto():
                 validar_nombre = True
             else:
                 print("ERROR: El campo nombre debe tener entre 3 y 30 letras.")
-        #CALIBRE # La validacion se hace desde validarCampo.
-        recorrerTablas("CALIBRES")
-        id_calibre = validarCampo("CALIBRES", "Selecciona el calibre: ")
+
         #CATEGORIAS # La validacion se hace desde validarCampo.
         recorrerTablas("CATEGORIAS")
         id_categoria = validarCampo("CATEGORIAS", "Selecciona la categoria: ")
-        #TIPO_ARMA # La validacion se hace desde validarCampo.
-        recorrerTablas("TIPO_ARMA")
-        id_tipo_arma = validarCampo("TIPO_ARMA", "Selecciona el tipo de ar2ma: ")
+
+        cursor.execute("SELECT NOMBRE FROM CATEGORIAS WHERE ID = ?", (id_categoria,))
+        obtener_categoria = cursor.fetchone()[0].strip().upper()
+        
+        # ___ VALIDACIONES POR CATEGORIAS ____
+        # Si la categoría es un ARMA:
+        if "ARMA" in obtener_categoria:
+            #TIPO_ARMA # La validacion se hace desde validarCampo.
+            recorrerTablas("TIPO_ARMA")
+            id_tipo_arma = validarCampo("TIPO_ARMA", "Selecciona el tipo de arma: ")
+            # Si el tipo de arma es un MELEE
+            cursor.execute("SELECT NOMBRE FROM TIPO_ARMA WHERE ID = ?", (id_tipo_arma,))
+            tipo_nombre = cursor.fetchone()[0].upper()
+
+            if "MELEE" in tipo_nombre:
+                id_calibre = None
+            else:
+                #CALIBRE # La validacion se hace desde validarCampo.
+                recorrerTablas("CALIBRES")
+                id_calibre = validarCampo("CALIBRES", "Selecciona el calibre: ")
+        # Si la categoría es MUNICION:
+        elif "MUNICION" in obtener_categoria:
+            #CALIBRE # La validacion se hace desde validarCampo.
+            recorrerTablas("CALIBRES")
+            id_calibre = validarCampo("CALIBRES", "Selecciona el calibre: ")
+            id_tipo_arma = None
+        
+        elif "ACCESORIOS" in obtener_categoria:
+             id_calibre = None
+             id_tipo_arma = None
+
         #FABRICANTES # La validacion se hace desde validarCampo.
         recorrerTablas("FABRICANTES")
         id_fabricante =  validarCampo("FABRICANTES", "Selecciona el fabricante: ")
+        
         #STOCK # Validamos la cantidad de stock del producto: 
         validar_stock = False
         while not validar_stock:
@@ -63,6 +90,7 @@ def crearProducto():
                 validar_stock = True
             else:
                 print("ERROR: El stock debe estar entre 0 y 10.000")
+        
         #PRECIO # Validamos que el precio del producto este entre 1 y 30.000.
         validar_precio = False
         while not validar_precio:
@@ -71,6 +99,7 @@ def crearProducto():
                 validar_precio = True
             else:
                 print("ERROR: El precio del producto debe estar entre $1 y $30.000")
+        
         #DESCRIPCION # Validamos la descripcion del producto: 
         validar_descripcion = False
         while not validar_descripcion:
