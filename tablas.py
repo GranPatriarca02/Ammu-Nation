@@ -37,8 +37,8 @@ def crearTablas():
                     CREATE TABLE IF NOT EXISTS PRODUCTOS(
                             CODIGO_SERIE TEXT UNIQUE PRIMARY KEY,
                             NOMBRE TEXT NOT NULL,
-                            ID_CALIBRE INTEGER NOT NULL,
-                            ID_TIPO_ARMA INTEGER NOT NULL,
+                            ID_CALIBRE INTEGER,
+                            ID_TIPO_ARMA INTEGER,
                             ID_CATEGORIA INTEGER NOT NULL,
                             ID_FABRICANTE INTEGER NOT NULL,
                             STOCK INTEGER NOT NULL,
@@ -105,10 +105,10 @@ def mostrarProductos():
                 P.PRECIO,
                 P.DESCRIPCION
             FROM PRODUCTOS P
-            JOIN CALIBRES C ON P.ID_CALIBRE = C.ID
-            JOIN TIPO_ARMA T ON P.ID_TIPO_ARMA = T.ID
-            JOIN CATEGORIAS CAT ON P.ID_CATEGORIA = CAT.ID
-            JOIN FABRICANTES F ON P.ID_FABRICANTE = F.ID
+            LEFT JOIN CALIBRES C ON P.ID_CALIBRE = C.ID
+            LEFT JOIN TIPO_ARMA T ON P.ID_TIPO_ARMA = T.ID
+            LEFT JOIN CATEGORIAS CAT ON P.ID_CATEGORIA = CAT.ID
+            LEFT JOIN FABRICANTES F ON P.ID_FABRICANTE = F.ID
         ''')
 
         contador = 0
@@ -123,3 +123,65 @@ def mostrarProductos():
         
     except Exception as e:
         print("ERROR: No se ha podido recorrer la tabla PRODUCTOS", e)
+
+def mostrarPorCategoria():
+    try:
+        # Mostramos las categorias disponibles
+        cursor.execute("SELECT ID, NOMBRE FROM CATEGORIAS")
+        categorias = cursor.fetchall()
+
+        # Recorremos las categorias
+        if categorias:
+            for recorrerCategoria in categorias:
+                print(f"{recorrerCategoria[0]}: {recorrerCategoria[1]}")
+
+            id_valido = False
+            while not id_valido:
+                valor = input("Selecciona una categoria: ").strip()
+                if valor.isdigit():
+                    id_valor = int(valor)
+                for recorrerCategoria in categorias:
+                    if recorrerCategoria[0] == id_valor:
+                        id_valido = True
+                if not id_valido:
+                    print("La categoria no existe.")
+                else:
+                    print("Has introducido una opcion incorrecta.")
+
+            # Obtenemos los productos de esa categoria
+            cursor.execute('''
+                SELECT 
+                    P.CODIGO_SERIE, 
+                    P.NOMBRE, 
+                    C.NOMBRE AS CALIBRE, 
+                    T.NOMBRE AS TIPO_ARMA, 
+                    CAT.NOMBRE AS CATEGORIA, 
+                    F.NOMBRE AS FABRICANTE,
+                    P.STOCK,
+                    P.PRECIO,
+                    P.DESCRIPCION
+                FROM PRODUCTOS P
+                LEFT JOIN CALIBRES C ON P.ID_CALIBRE = C.ID
+                LEFT JOIN TIPO_ARMA T ON P.ID_TIPO_ARMA = T.ID
+                LEFT JOIN CATEGORIAS CAT ON P.ID_CATEGORIA = CAT.ID
+                LEFT JOIN FABRICANTES F ON P.ID_FABRICANTE = F.ID
+                WHERE P.ID_CATEGORIA = ?
+            ''', (id_valor,))
+
+            filas = cursor.fetchall()
+            if filas:
+                contador = 1
+                while contador <= len(filas):
+                    fila = filas[contador-1]
+                    print(f"{contador}): Codigo de serie: {fila[0]}, Nombre: {fila[1]}, Calibre: {fila[2]}, Tipo de arma: {fila[3]}, Categoria: {fila[4]}, Fabricante: {fila[5]}, Stock: {fila[6]}, Precio: {fila[7]}$")
+                    print(f"Descripcion: {fila[8]} \n")
+                    contador += 1
+            else:
+                print("No hay productos en esta categoria.")
+        else:
+            print("No hay categorias disponibles.")
+
+    except Exception as e:
+        print("ERROR: No se ha podido mostrar los productos por categoria", e)
+
+
