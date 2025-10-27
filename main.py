@@ -1,7 +1,7 @@
 # ARCHIVO PRINCIPAL.
 
 # Accedemos a la clase tablas y usamos el objeto cursor para lanzar las consultas.
-from tablas import cursor, mostrarProductos
+from tablas import cursor, mostrarProductos, mostrarPorCategoria
 from funciones import crearProducto, borrarProducto, buscarProducto
 
 # TEMPORAL:
@@ -42,7 +42,22 @@ def menuProductos():
         if opcion == "1":
             crearProducto()
         elif opcion == "2":
-            mostrarProductos()
+            while True:
+                print("______ AMMU NATION: LISTA DE PRODUCTOS: ______")
+                print("1. Mostrar por categoria")
+                print("2. Mostrar todos los productos")
+                print("0. Volver atras")
+                
+                seleccion = input("Selecciona una opcion: ").strip()
+                if seleccion == "1":
+                    mostrarPorCategoria()
+                elif seleccion == "2":
+                    mostrarProductos()
+                elif seleccion == "0":
+                    break
+                else:
+                    print("Has introducido una opcion incorrecta.")
+
         elif opcion == "3":
             buscarProducto()
         elif opcion == "4":
@@ -53,10 +68,6 @@ def menuProductos():
             break
         else:
             print("Has introducido una opcion incorrecta.")
-
-
-
-
 
 def main():
     menu()
