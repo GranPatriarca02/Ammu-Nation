@@ -20,6 +20,6 @@ cursor = conn.cursor()
 def actualizarCommit():
     try:
         conn.commit()
-        print("[BD]: Se han actualizado las operaciones.")
+        #print("[BD]: Se han actualizado las operaciones.")
     except Exception as e:
         print("ERROR:", e)

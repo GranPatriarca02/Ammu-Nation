@@ -95,7 +95,7 @@ def crearProducto():
         validar_precio = False
         while not validar_precio:
             precio =  validarInt("Introduce el precio del producto: ")
-            if(precio > 0 and precio <= 30000):
+            if(precio >= 0 and precio <= 30000):
                 validar_precio = True
             else:
                 print("ERROR: El precio del producto debe estar entre $1 y $30.000")
@@ -225,3 +225,91 @@ def codigoDeSerie(id_categoria):
         numAleatorio = numAleatorio + random.choice("1234567890")
     # Retornamos fuera del bucle el codigo de serie:    
     return f"{nombreCategoria}-{numAleatorio}"
+
+# Funcion que edita un producto:
+def editarProducto():
+    try:
+        # Mostramos todos los productos:
+        mostrarProductos()
+        codigo_serie = input("Introduce el codigo de serie del producto a editar: ").strip().upper()
+
+        # Si encontramos el producto lo almacenamos en producto y lo recorremos.
+        cursor.execute('''
+            SELECT CODIGO_SERIE, NOMBRE, ID_CALIBRE, ID_TIPO_ARMA, ID_CATEGORIA, ID_FABRICANTE, STOCK, PRECIO, DESCRIPCION
+            FROM PRODUCTOS
+            WHERE CODIGO_SERIE = ?
+        ''', (codigo_serie,))
+        producto = cursor.fetchone()
+        # Si el producto no existe:
+        if not producto:
+            print(f"El codigo de serie: {codigo_serie} no existe.")
+        
+        # En caso de que exista mostrara la lista de lo que podemos editar:
+        else:
+            print(f"______ AMMU NATION: EDITANDO PRODUCTO: {producto[1]} ______")
+            print("1. Nombre.")
+            print("2. Precio.")
+            print("3. Stock.")
+            print("4. Descripcion.")
+            print("5. Fabricante.")
+            print("6. Tipo de arma.")
+            print("7. Calibre.")
+            print("0. Volver atras.")
+            opcion = input(f"Selecciona la opcion que quieres editar del producto: {producto[1]}: ")
+            
+            # EDITAR NOMBRE:
+            if opcion == "1":
+                validar_nombre = False
+                while not validar_nombre:
+                    editar_valor = input("Introduce el nombre del producto: ")
+                    if(len(editar_valor) == 0):
+                        print("El nombre del producto no puede estar vacio.")
+                        validar_nombre = False
+                    elif(3 < len(editar_valor) < 30):
+                        cursor.execute("UPDATE PRODUCTOS SET NOMBRE = ? WHERE CODIGO_SERIE = ?", (editar_valor, codigo_serie))
+                        print(f"Has actualizado el producto: {codigo_serie}")
+                        actualizarCommit()
+                        validar_nombre = True
+                    else:
+                        print("El producto debe tener entre 3 y 30 caracteres.")
+            
+            # EDITAR PRECIO:
+            elif opcion == "2":
+                validar_precio = False
+                while not validar_precio:
+                    editar_precio = validarInt("Introduce el precio del producto: ")
+                    if(editar_precio >= 0 and editar_precio <= 30000):
+                        cursor.execute("UPDATE PRODUCTOS SET PRECIO = ? WHERE CODIGO_SERIE = ?", (editar_precio, codigo_serie))
+                        actualizarCommit()
+                        validar_precio = True
+                    else:
+                        print("ERROR: El precio del producto debe estar entre $1 y $30.000")
+            
+            # EDITAR STOCK:
+            elif opcion == "3":
+                validar_stock = False
+                while not validar_stock:
+                    editar_stock = validarInt("Introduce el stock del producto: ")
+                    if(editar_stock >= 0 and editar_stock <= 10000):
+                        cursor.execute("UPDATE PRODUCTOS SET STOCK = ? WHERE CODIGO_SERIE = ?", (editar_stock, codigo_serie))
+                        actualizarCommit()
+                        editar_stock = True
+                    else:
+                        print("ERROR: El stock debe estar entre 0 y 10.000")
+            
+            # EDITAR DESCRIPCION:
+
+            # EDITAR FABRICANTE:
+            elif opcion == "5":
+                recorrerTablas("FABRICANTES")
+                id_fabricante =  validarCampo("FABRICANTES", "Selecciona el fabricante: ")
+                cursor.execute("UPDATE PRODUCTOS SET ID_FABRICANTE = ? WHERE CODIGO_SERIE = ?", (id_fabricante, codigo_serie))
+                actualizarCommit()
+        
+                # SELECT para consultar el nombre del fabricante
+                cursor.execute("SELECT NOMBRE FROM FABRICANTES WHERE ID = ?", (id_fabricante,))
+                nombre_fabricante = cursor.fetchone()
+                print(f"Has actualizado el producto: {codigo_serie} con el fabricante {id_fabricante}: {nombre_fabricante[0]}")
+            
+    except Exception as e:
+        print("ERROR al editar el producto:", e)

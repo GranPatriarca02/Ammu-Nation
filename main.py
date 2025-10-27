@@ -2,7 +2,7 @@
 
 # Accedemos a la clase tablas y usamos el objeto cursor para lanzar las consultas.
 from tablas import cursor, mostrarProductos, mostrarPorCategoria
-from funciones import crearProducto, borrarProducto, buscarProducto
+from funciones import crearProducto, borrarProducto, buscarProducto, editarProducto
 
 # TEMPORAL:
 ## Mostramos el contenido de las TABLAS de forma temporal, se debe crear un metodo.
@@ -61,7 +61,7 @@ def menuProductos():
         elif opcion == "3":
             buscarProducto()
         elif opcion == "4":
-            print("NOPE")
+            editarProducto()
         elif opcion == "5":
             borrarProducto()
         elif opcion == "0":
