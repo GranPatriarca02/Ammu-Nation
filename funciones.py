@@ -4,41 +4,47 @@ import sqlite3
 # y la función para guardar cambios (commit/sync).
 from db import cursor, actualizarCommit, conn_local, cursor_local
 
-
-
-
-## 2. FUNCIONES DE VALIDACIÓN Y UTILERÍA
-
+## _____ 2. FUNCIONES DE VALIDACIÓN _____
+# Validamos si existe la fila a la que queremos acceder.
 def validarFila(tabla, id_tabla):
-    """Verifica si un ID existe en una tabla dada."""
+    # Ejecutamos la consulta y devolvemos la tabla {FABRICANTES}, id_tabla remplaza la ID que seleccionamos con un input
+    # en la ejecución de WHERE ID = ?
     cursor.execute(f"SELECT ID FROM {tabla} WHERE ID = ?", (id_tabla,))
-    return cursor.fetchone() is not None # Retorna True si existe, False si no
+    return cursor.fetchone() is not None #Retornamos un valor booleano, si no es nula devuelve TRUE.
 
+# Validamos si el campo de la tabla existe
+# Este metodo contiene validarInt, que valida si el campo introducido es un numero.
 def validarCampo(tabla, mensaje):
-    """Solicita un ID y lo valida contra la base de datos."""
     while True: 
         id_val = validarInt(mensaje)
         if validarFila(tabla, id_val):
             return id_val
         else:
             print(f"Advertencia: El ID: {id_val} no existe en la tabla: {tabla}")
-
+# Mediante un bucle validamos los numeros que introduzca el usuario (Deben ser INT).
 def validarInt(mensaje):
-    """Crea un bucle para validar si la entrada del usuario es un número entero."""
     while True:
         valor = input(mensaje).strip()
         if valor.isdigit():
             return int(valor)
         else:
-            print("ERROR: Debes introducir un número.")
+            print("ERROR: Debes introducir un numero.")
 
 def codigoDeSerie(id_categoria):
-    """Genera un código de serie basado en la categoría."""
+    # El codigo de serie variara segun el tipo de categoria:
+        # ARM para ARMAS
+        # MUN para MUNICIONES
+        # ACC para ACCESROIOS
+    # Obtenemos el nombre de la categoria, se puede hacer por IDS, pero si cambiamos el nombre de la categoria 
+    # recuperaremos el valor eroneamente.
+    # Una vez obtenemos la categoría nos generará 7 digitos aleatorios, (Se puede crear una función que también detecte si
+    # es posible que el numero sea unico, aunque en la base de datos ya esta restringido con UNIQUE)
     cursor.execute("SELECT NOMBRE FROM CATEGORIAS WHERE ID = ?", (id_categoria,))
     consulta = cursor.fetchone()
+     # Si al recorrer la consula no obtenemos la ID retornamos false y dejamos de ejecutar la funcion.
     if consulta is None:
         return print(f"Advertencia: La categoría no existe")
-        
+    # Transformamos la consulta del String en mayusculas.
     devolver_categoria = consulta[0].upper()
 
     if "ARMAS" in devolver_categoria:
@@ -49,21 +55,21 @@ def codigoDeSerie(id_categoria):
         nombreCategoria = "ACC"
     elif "EQUIPAMIENTO" in devolver_categoria:
         nombreCategoria = "EQP"
+    # No deberia de entrar, a no ser que añadamos más tipos de categorías.
     else:
         nombreCategoria = "GEN"
         
-    # Generamos el número aleatorio
+    # Generamos el numero aleatorio:
     numAleatorio = "".join(random.choices("1234567890", k=7))
+    # Retornamos el codigo de serie:
     return f"{nombreCategoria}-{numAleatorio}"
-
-
-## 3. FUNCIONES DE VISUALIZACIÓN (READ)
-
+# Metodo para recorrer las tablas
 def recorrerTablas(nombreTabla):
-    """Muestra todos los registros de una tabla auxiliar (CATEGORIAS, FABRICANTES, etc.)."""
     try:
+        # Preparamos nuestra consulta y la guardamos en la variable filas.
         cursor.execute(f"SELECT ID, NOMBRE FROM {nombreTabla}")
         filas = cursor.fetchall()
+        # Si filas es verdadero mostramos el contenido de la tabla y recorremos la fila una por una para mostrarla.
         if filas:
             print(f"\nSELECCIÓN DE: {nombreTabla}")
             for fila in filas:
@@ -72,9 +78,8 @@ def recorrerTablas(nombreTabla):
             print(f"Advertencia: La tabla: {nombreTabla} está vacía.")
     except Exception as e:
         print(f"ERROR: No se ha podido recorrer la tabla: {nombreTabla} o no existe", e)
-
+# Mostramos los productos: 
 def mostrarProductos():
-    """Lista todos los productos con sus detalles (JOIN en todas las tablas)."""
     try: 
         cursor.execute('''
             SELECT 
@@ -98,7 +103,7 @@ def mostrarProductos():
                 print(f"   Categoría: {fila[4]} | Tipo Arma: {fila[3] if fila[3] else 'N/A'} | Calibre: {fila[2] if fila[2] else 'N/A'}")
                 print(f"   Fabricante: {fila[5]} | Stock: {fila[6]} | Precio: ${fila[7]:.2f}")
         else:
-            print("Advertencia: No hay productos creados.")
+            print("INFO: No hay productos creados.")
         
     except Exception as e:
         print("ERROR: No se ha podido listar los productos", e)
@@ -106,7 +111,7 @@ def mostrarProductos():
 def mostrarPorCategoria():
     """Muestra los productos filtrados por una categoría seleccionada."""
     try:
-        # 1. Mostrar categorías disponibles
+        # Mostramos las categorias disponibles
         cursor.execute("SELECT ID, NOMBRE FROM CATEGORIAS ORDER BY ID")
         categorias = cursor.fetchall()
         if not categorias:
@@ -118,7 +123,7 @@ def mostrarPorCategoria():
              print(f"{id_cat}: {nombre_cat}")
 
         # 2. Validar selección
-        id_valor = validarCampo("CATEGORIAS", "Selecciona la categoría (ID): ")
+        id_valor = validarCampo("CATEGORIAS", "Selecciona la categoria (ID): ")
 
         # 3. Obtener los productos de esa categoría
         cursor.execute('''

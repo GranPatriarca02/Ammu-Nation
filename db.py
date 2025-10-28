@@ -6,7 +6,6 @@ import sqlite3
 import random
 
 # _____ CONEXIÓN Y CONFIGURACIÓN DE LA BASE DE DATOS _____
-
 DB_URL = envyte.get("DB_URL")
 API_TOKEN = envyte.get("API_TOKEN")
 

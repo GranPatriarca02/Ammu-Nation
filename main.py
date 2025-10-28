@@ -9,9 +9,8 @@ from funciones import crearProducto, borrarProducto, buscarProducto, editarProdu
 # ----------------------------------------------------------------------------------
 # Menu del Ammu Nation: 
 def menu():
-    """Menú principal de la aplicación."""
     while True:
-        print("\n______ AMMU NATION: MENÚ PRINCIPAL ______")
+        print("\n______ AMMU NATION: MENU PRINCIPAL ______")
         print("1. Inventario (Reporte y Agregaciones).")
         print("2. Productos (CRUD).")
         print("3. Mostrar categorías.")
@@ -28,7 +27,7 @@ def menu():
             # Esta opción llama a la función de visualización simple por categoría
             mostrarPorCategoria()
         elif opcion == "0":
-            print(" Cerrando el programa. ¡Hasta pronto!")
+            print(" Cerrando el programa.")
             break
         else:
             print(" Has introducido una opción incorrecta. Inténtalo de nuevo.")
@@ -36,13 +35,13 @@ def menu():
 def menuProductos():
     """Submenú para la gestión CRUD de productos."""
     while True:
-        print("\n______ AMMU NATION: MENÚ DE PRODUCTOS (CRUD) ______")
+        print("\n______ AMMU NATION: MENU DE PRODUCTOS (CRUD) ______")
         print("1. Agregar un producto.")
         print("2. Mostrar lista de productos.")
-        print("3. Buscar un producto por código de serie.")
+        print("3. Buscar un producto por codigo de serie.")
         print("4. Editar un producto.")
         print("5. Eliminar un producto.")
-        print("0. Volver atrás")
+        print("0. Volver atras")
 
         opcion = input("Selecciona una opción: ").strip()
         
@@ -53,9 +52,9 @@ def menuProductos():
             # Submenú para mostrar listados
             while True:
                 print("\n______ AMMU NATION: LISTA DE PRODUCTOS: ______")
-                print("1. Mostrar por categoría")
+                print("1. Mostrar por categoria")
                 print("2. Mostrar todos los productos")
-                print("0. Volver atrás")
+                print("0. Volver atras")
                 
                 seleccion = input("Selecciona una opción: ").strip()
                 if seleccion == "1":
@@ -65,7 +64,7 @@ def menuProductos():
                 elif seleccion == "0":
                     break
                 else:
-                    print(" Has introducido una opción incorrecta.")
+                    print("INFO: Has introducido una opciOn incorrecta.")
 
         elif opcion == "3":
             buscarProducto()
@@ -80,16 +79,14 @@ def menuProductos():
 
 # ----------------------------------------------------------------------------------
 def main():
-    """Punto de entrada de la aplicación."""
     try:
         # 1. Inicializa la BD (crea tablas y hace la ingesta inicial)
         inicializar_base_datos() 
         
         # 2. Inicia la interfaz de consola
         menu()
-        
     except Exception as e:
-        print(f"ERROR CRÍTICO EN LA APLICACIÓN: {e}")
+        print(f"ERROR: {e}")
     finally:
         # 3. Limpieza de recursos (conexiones locales y de Turso)
         cerrarConexiones()
